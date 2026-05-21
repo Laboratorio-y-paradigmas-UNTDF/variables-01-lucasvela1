@@ -4,6 +4,8 @@
 // Las funciones buggy* están completas y NO deben modificarse.
 // Implementar las funciones fixed* para corregir el error de binding/ámbito.
 
+import { makeAccumulator } from "./ej03";
+
 // --- 5a: var hoisting en closures ---
 
 // BUGGY (no modificar): var tiene scope de función, no de bloque.
@@ -20,7 +22,11 @@ export function buggyVarLoop(n: number): number[] {
 // CORRECTO: usar let para que cada iteración cree su propio binding de i.
 // fixedVarLoop(3) → [0, 1, 2]
 export function fixedVarLoop(n: number): number[] {
-  throw new Error("TODO: implementar");
+  const fns: Array<() => number> = [];
+  for (let i = 0; i < n; i++) { // usar let para crear un binding por iteración, la diferencia con var es que var tiene scope de función, no de bloque
+    fns.push(() => i);
+  }
+  return fns.map((f) => f());
 }
 
 // --- 5b: shadowing involuntario ---
@@ -40,7 +46,11 @@ export function buggySum(nums: number[]): number {
 // CORRECTO: sumar todos los elementos SIN crear un binding que opaque al acumulador.
 // fixedSum([1, 2, 3]) → 6
 export function fixedSum(nums: number[]): number {
-  throw new Error("TODO: implementar");
+  let result = 0;
+  nums.forEach(function(n){
+    result += n;
+  });
+  return result;
 }
 
 // --- 5c: suma sin variables globales ---
@@ -51,5 +61,5 @@ export function fixedSum(nums: number[]): number {
 // fixedSumArray([])            → 0
 // fixedSumArray([-1, -2, 3])  → 0
 export function fixedSumArray(nums: number[]): number {
-  throw new Error("TODO: implementar");
+  return nums.reduce((accumulator, current) => accumulator + current, 0);
 }
