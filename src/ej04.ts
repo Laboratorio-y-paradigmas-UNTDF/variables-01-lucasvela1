@@ -15,13 +15,20 @@ export function scopeChainLookup(
   scopes: Record<string, number>[],
   name: string
 ): number | undefined {
-  throw new Error("TODO: implementar");
+  for (const scope of scopes) {
+    if (name in scope) {
+      return scope[name];
+    }
+  }
+  return undefined;
 }
 
 // 4b. makeMultiplier: el factor queda capturado en el ámbito léxico externo.
 // makeMultiplier(3)(5) → 15
 export function makeMultiplier(factor: number): (x: number) => number {
-  throw new Error("TODO: implementar");
+  return function(x: number): number {
+    return x * factor;
+  };
 }
 
 // 4c. makeFunctions: retorna un array de n funciones donde la función en
@@ -30,7 +37,11 @@ export function makeMultiplier(factor: number): (x: number) => number {
 // Con var, todas las closures capturarían n (el valor final de i).
 // makeFunctions(3): [() => 0, () => 1, () => 2]
 export function makeFunctions(n: number): Array<() => number> {
-  throw new Error("TODO: implementar");
+  const result: Array<() => number> = [];
+  for (let i=0; i<n; i++){
+    result.push(() => i);
+  };
+  return result;
 }
 
 // 4d. makeLogger: retorna una función que antepone el prefijo a cada mensaje (5 pts).
@@ -42,5 +53,7 @@ export function makeFunctions(n: number): Array<() => number> {
 // const warn = makeLogger("[WARN]");
 // warn("memoria alta")     → "[WARN]: memoria alta"
 export function makeLogger(prefix: string): (msg: string) => string {
-  throw new Error("TODO: implementar");
+  return (msj: string): string => {
+    return `${prefix}: ${msj}`;
+  };
 }
