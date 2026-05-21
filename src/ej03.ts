@@ -13,7 +13,11 @@ export interface Counter {
 // factorial(0) = 1
 // factorial(n) = n * factorial(n - 1)   para n > 0
 export function factorial(n: number): number {
-  throw new Error("TODO: implementar");
+  if (n === 0){
+    return 1;
+  } else {
+    return n * factorial(n - 1);
+  }
 }
 
 // 3b. Crear un contador con estado encapsulado en un closure (heap-dynamic-implicit).
@@ -22,14 +26,26 @@ export function factorial(n: number): number {
 // makeCounter(5).value()     → 5
 // reset() vuelve al valor con que fue creado (initial).
 export function makeCounter(initial: number): Counter {
-  throw new Error("TODO: implementar");
+  if (initial < 0) {
+    throw new Error("initial debe ser un numero positivo");
+  } else {
+    let count = initial;
+    return {
+      increment: () => ++count,  //Tambien podria ser count++ y return current
+      decrement: () => --count,
+      reset: () => { count = initial; },
+      value: () => count,
+    }
+  }
 }
 
 // 3c. Retorna una función que suma n a su argumento (currying/closure).
 // n queda capturado en el closure — heap-dynamic-implicit.
 // makeAdder(3)(4) → 7
 export function makeAdder(n: number): (x: number) => number {
-  throw new Error("TODO: implementar");
+  return function(x: number) :number {
+    return x+n;
+  }
 }
 
 // 3d. Crea un acumulador que inicia en 0.
@@ -37,7 +53,11 @@ export function makeAdder(n: number): (x: number) => number {
 // total() retorna el total actual sin modificarlo.
 // const { add, total } = makeAccumulator(); add(5); add(3); total() → 8
 export function makeAccumulator(): { add: (n: number) => void; total: () => number } {
-  throw new Error("TODO: implementar");
+  let total = 0;
+  return {
+    add: (n: number) => { total += n; },
+    total: () => total,
+  };
 }
 
 // 3e. Retorna una versión memorizada de fn: la primera llamada con n computa y almacena
@@ -48,5 +68,14 @@ export function makeAccumulator(): { add: (n: number) => void; total: () => numb
 //   const fn = memoize((n) => { calls++; return n * n; });
 //   fn(4); fn(4); fn(4);  → calls === 1  (fn real se invoca una sola vez)
 export function memoize(fn: (n: number) => number): (n: number) => number {
-  throw new Error("TODO: implementar");
+  const cache = new Map <number, number> ();
+  return function(n: number): number {
+    if (cache.has(n)){
+      return cache.get(n) as number;
+    } else {
+      const result = fn(n);
+      cache.set(n, result);
+      return result;
+    }
+  }
 }
